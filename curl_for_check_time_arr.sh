@@ -1,5 +1,10 @@
 #!/bin/bash
 set -euo pipefail
+#set fileformat=unix
+if [[ ! -d "~/git_repos/curl-metrics" ]]; then
+	mkdir -p "~/git_repos/curl-metrics"
+fi
+exec 1>~/git_repos/curl-metrics/tmp_data.txt
 print_url_in_total()
 {
 	num=1
@@ -11,25 +16,25 @@ print_url_in_total()
 total()
 {
 	echo "$count_chek Retries with inteval $interval"
-	echo "Test estimated time: $DIFF"	
+	#echo "Test estimated time: $DIFF"	
 	number=1
-	for url in ${url_arr[*]}; do
-		echo $number $url
-		let "number=$number+1"
-	done
-	echo -n "Metric: time_namelookup "
-	print_url_in_total
-	echo -e "\n99: ${perc_99_tn[@]}"
-	echo 95: ${perc_95_tn[@]}
-	echo 70: ${perc_70_tn[@]}
-	echo 50: ${perc_50_tn[@]}
+	#for url in ${url_arr[*]}; do
+	#	echo $number $url
+	#	let "number=$number+1"
+	#done
+	#echo -n "Metric: time_namelookup "
+	#print_url_in_total
+	echo -e 99: ${perc_99_tn[@]}
+	echo -e 95: ${perc_95_tn[@]}
+	echo "70: ${perc_70_tn[@]}"
+	echo "50: ${perc_50_tn[@]}"
 	echo 25: ${perc_25_tn[@]}
 	echo MEAN: ${url1_tn_mean[@]}
 	echo MIN: ${url1_tn_min[@]}
 	echo MAX: ${url1_tn_max[@]}
-	echo -n "Metric: time_connect "
-	print_url_in_total
-	echo -e "\n99: ${perc_99_tc[@]}"
+	#echo -n "Metric: time_connect "
+	#print_url_in_total
+	echo -e "99: ${perc_99_tc[@]}"
 	echo 95: ${perc_95_tc[@]}
 	echo 70: ${perc_70_tc[@]}
 	echo 50: ${perc_50_tc[@]}
@@ -37,9 +42,9 @@ total()
 	echo MEAN: ${url1_tc_mean[@]}
 	echo MIN: ${url1_tc_min[@]}
 	echo MAX: ${url1_tc_max[@]}
-	echo -n "Metric: time_appconnect "
-	print_url_in_total
-	echo -e "\n99: ${perc_99_ta[@]}"
+	#echo -n "Metric: time_appconnect "
+	#print_url_in_total
+	echo -e "99: ${perc_99_ta[@]}"
 	echo 95: ${perc_95_ta[@]}
 	echo 70: ${perc_70_ta[@]}
 	echo 50: ${perc_50_ta[@]}
@@ -47,9 +52,9 @@ total()
 	echo MEAN: ${url1_ta_mean[@]}
 	echo MIN: ${url1_ta_min[@]}
 	echo MAX: ${url1_ta_max[@]}
-	echo -n "Metric: time_pretransfer "
-	print_url_in_total
-	echo -e "\n99: ${perc_99_tp[@]}"
+	#echo -n "Metric: time_pretransfer "
+	#print_url_in_total
+	echo -e "99: ${perc_99_tp[@]}"
 	echo 95: ${perc_95_tp[@]}
 	echo 70: ${perc_70_tp[@]}
 	echo 50: ${perc_50_tp[@]}
@@ -57,16 +62,16 @@ total()
 	echo MEAN: ${url1_tp_mean[@]}
 	echo MIN: ${url1_tp_min[@]}
 	echo MAX: ${url1_tp_max[@]}
-	echo -n "Metric: time_starttransfer "
-	print_url_in_total
-	echo -e "\n99: ${perc_99_ts[@]}"
+	#echo -n "Metric: time_starttransfer "
+	#print_url_in_total
+	echo -e "99: ${perc_99_ts[@]}"
 	echo 95: ${perc_95_ts[@]}
 	echo 70: ${perc_70_ts[@]}
 	echo 50: ${perc_50_ts[@]}
 	echo 25: ${perc_25_ts[@]}
 	echo MEAN: ${url1_ts_mean[@]}
 	echo MIN: ${url1_ts_min[@]}
-	echo MAX: ${url1_ts_max[@]}
+	echo "MAX: ${url1_ts_max[@]}"
 }
 percen()
 {
@@ -106,7 +111,7 @@ read count_url
 declare -a url_arr
 count=1
 while (( "$count"<=$count_url )); do
-	echo "$count:"
+	#echo "$count:"
 	read url
 	url_arr+=("$url")
 	let "count+=1"
@@ -218,3 +223,4 @@ done
 END=$(date +%s)
 DIFF=$(($END - $START))
 total
+mv ~/git_repos/curl-metrics/tmp_data.txt ~/git_repos/curl-metrics/data.txt
